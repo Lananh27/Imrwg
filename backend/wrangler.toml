@@ -1,0 +1,19 @@
+name = "imrwg-worker-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+[vars]
+FRONTEND_URL = "http://localhost:3000"
+ADMIN_EMAIL = "admin@example.com"
+
+
+AWS_REGION= "us-east-1"
+AWS_S3_BUCKET= "lananh27-s3-bucket"
+AWS_S3_PREFIX = "uploads"
+AWS_S3_PUBLIC_URL = "https://lananh27-s3-bucket.s3.us-east-1.amazonaws.com"
+
+
+[[d1_databases]]
+binding = "DB"
+database_name = "imrwg-db"
+database_id = "da1a9102-c204-4ae9-a854-9ba7b9873470"

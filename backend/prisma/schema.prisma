@@ -1,0 +1,277 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Announcement {
+  id          Int      @id @default(autoincrement())
+  title       String
+  content     String
+  imageUrl    String?
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Person {
+  id          Int      @id @default(autoincrement())
+  fullName    String
+  role        String?
+  institution String?
+  email       String?
+  cvLink      String?
+  location    String?
+  avatar      String?
+  bio         String?
+
+  category    String   @default("speakers")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Project {
+  id           Int      @id @default(autoincrement())
+  title        String
+  slug         String   @unique
+  subtitle     String?
+  description  String?
+  content      String?
+  bullets      Json?
+  image        String?
+  readMoreLink String?
+  publishedAt  DateTime?
+  category     String   @default("Research")
+  researchArea String   @default("General")
+  status       String   @default("In Progress")
+  yearRange    String?
+  membersCount String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model HomeContent {
+  id          Int    @id @default(autoincrement())
+  slug        String @unique
+
+  siteName     String?
+  headerLogo   String?
+  welcomeTitle String?
+  welcomeText  String?
+  marqueeText  String?
+
+  heroImage       String?
+  heroTitle       String?
+  heroDescription String?
+  heroButtonText  String?
+  heroButtonLink  String?
+  heroSlides      Json?
+
+  infoItems      Json?
+  attentionItems Json?
+  partnerLogos   Json?
+
+  projectsSectionTitle String?
+  projectsItems        Json?
+
+  mapsSectionTitle String?
+  mapsItems        Json?
+
+  footerMailingText String?
+  footerContactText String?
+  footerSocialText  String?
+  footerLogo        String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AboutContent {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  title       String?
+  subtitle    String?
+  description String?
+  mission     String?
+  vision      String?
+  content     String?
+  extra       Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SiteSetting {
+  id          Int     @id @default(1)
+  siteName    String  @default("International Mekong Research Working Group (IMRWG)")
+  mainLogo    String?
+  subLogo1    String?
+  subLogo2    String?
+  subLogo3    String?
+  subLogo4    String?
+  centerImage String?
+
+  footerTitle       String?
+  footerDescription String?
+  footerAddress     String?
+  footerEmail       String?
+  footerPhone       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FooterLink {
+  id    Int    @id @default(autoincrement())
+  label String
+  url   String
+  order Int    @default(0)
+}
+
+model HomeInfoItem {
+  id       Int    @id @default(autoincrement())
+  date     String
+  location String
+  order    Int    @default(0)
+}
+
+model Attention {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EducationContent {
+  id               Int      @id @default(autoincrement())
+  slug             String   @unique
+
+  heroBadge        String?
+  heroTitle        String?
+  heroSubtitle     String?
+  heroDescription  String?
+  heroImage        String?
+
+  stats            Json?
+  featuredPrograms Json?
+  resourceItems    Json?
+  timelineItems    Json?
+
+  ctaTitle         String?
+  ctaDescription   String?
+  ctaButtonText    String?
+  ctaButtonLink    String?
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+model DataContent {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+
+  title       String?
+  subtitle    String?
+  description String?
+  heroImage   String?
+
+  cards       Json?
+  tableRows   Json?
+  files       Json?
+  chartItems  Json?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+model Meeting {
+  id               Int      @id @default(autoincrement())
+  title            String
+  summary          String?
+  location         String?
+  startDate        DateTime
+  endDate          DateTime
+  heroImage        String?
+  agendaFileUrl    String?
+  reportFileUrl    String?
+  photosLink       String?
+
+  type             String   @default("past")
+  status           String   @default("published")
+  time             String?
+  registrationOpen Boolean  @default(false)
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  registrations    Registration[]
+}
+
+model Registration {
+  id          Int      @id @default(autoincrement())
+  fullName    String
+  email       String
+  phone       String
+  organization String
+  position    String?
+  note        String?
+  status      String   @default("pending")
+
+  meetingId   Int
+  meeting     Meeting  @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+model LibraryDocument {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  description String?
+  category    String?
+  author      String?
+  publishedAt DateTime?
+  fileType    String?
+  fileUrl     String?
+  coverImage  String?
+  status      String   @default("PUBLISHED")
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+model DataItem {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  category    String
+  description String
+  value       String?
+  unit        String?
+  fileUrl     String?
+  imageUrl    String?
+  year        Int?
+  isPublished Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
